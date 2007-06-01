@@ -1,7 +1,7 @@
 
 %define name	xxv
 %define version	0.90
-%define rel	1
+%define rel	2
 
 Summary:	Xtreme eXtension for VDR
 Name:		%name
@@ -16,6 +16,8 @@ Source3:	xxv.sysconfig
 Source4:	xxv.logrotate
 BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildArch:	noarch
+# for macros:
+BuildRequires:	vdr-devel
 Requires(post):	rpm-helper
 Requires(preun): rpm-helper
 Requires:	vdr-common

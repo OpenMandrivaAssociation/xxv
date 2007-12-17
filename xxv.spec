@@ -14,7 +14,6 @@ Source:		http://xpix.dieserver.de/downloads/xxv/%name-%version.tar.bz2
 Source2:	xxv.init
 Source3:	xxv.sysconfig
 Source4:	xxv.logrotate
-BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildArch:	noarch
 # for macros:
 BuildRequires:	vdr-devel

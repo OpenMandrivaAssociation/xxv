@@ -1,7 +1,7 @@
 
 %define name	xxv
-%define version	0.90
-%define rel	2
+%define version	1.2
+%define rel	1
 
 Summary:	Xtreme eXtension for VDR
 Name:		%name
@@ -10,10 +10,13 @@ Release:	%mkrel %rel
 Group:		Video
 License:	LGPL
 URL:		http://xpix.dieserver.de/
-Source:		http://xpix.dieserver.de/downloads/xxv/%name-%version.tar.bz2
+Source:		http://xpix.dieserver.de/downloads/xxv/%name-%version.tgz
 Source2:	xxv.init
 Source3:	xxv.sysconfig
 Source4:	xxv.logrotate
+# (Anssi 02/2008) In initscript we precreate empty pidfile so that vdr user
+# has the rights to write there:
+Patch0:		xxv-1.2-ignore-empty-pidfile.patch
 BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildArch:	noarch
 # for macros:
@@ -24,7 +27,6 @@ Requires:	vdr-common
 Requires:	mysql
 Requires:	vdr2jpeg
 # find-requires fails to add:
-Requires:	perl(Tie::LogFile)
 Requires:	perl(Config::Tiny)
 Requires:	perl(Net::IP::Match::Regexp)
 Requires:	perl(Term::ReadLine::Perl)
@@ -32,7 +34,6 @@ Requires:	perl(Module::Reload)
 Requires:	perl(Mail::SendEasy)
 Requires:	perl(Net::XMPP)
 Requires:	perl(MP3::Icecast)
-Requires:	perl(Event::File)
 Requires:	perl(Net::Amazon::Request::Artist)
 Requires:	perl(Proc::Killfam)
 
@@ -58,6 +59,7 @@ other programs can access again svdrp.
 
 %prep
 %setup -q
+%patch0 -p1
 
 # Corruption?
 perl -pi -e 's/^.*package XXV::OUTPUT::Wml;$/package XXV::OUTPUT::Wml;/' lib/XXV/OUTPUT/Wml.pm
@@ -137,7 +139,7 @@ install -d -m755 %{buildroot}%{_datadir}/%{name}/skins
 cp -a wml html %{buildroot}%{_datadir}/%{name}/skins
 ln -s html %{buildroot}%{_datadir}/%{name}/skins/default
 
-cp -a lib/Tools.pm lib/XXV lib/HTML lib/SOAP share/* %{buildroot}%{_datadir}/%{name}
+cp -a lib/Tools.pm lib/XXV lib/SOAP share/* %{buildroot}%{_datadir}/%{name}
 
 for f in locale/*/; do
 	install -d -m755 \
@@ -156,6 +158,9 @@ install -m755 %SOURCE2 %{buildroot}%{_initrddir}/xxv
 
 install -d -m755 %{buildroot}%{_logdir}/xxv
 
+install -d -m755 %{buildroot}%{_mandir}/man1
+install -m644 doc/*.1  %{buildroot}%{_mandir}/man1
+
 %find_lang xxv
 
 %clean
@@ -169,7 +174,7 @@ rm -rf %{buildroot}
 
 %files -f xxv.lang
 %defattr(-,root,root)
-%doc doc/*.txt README.install.urpmi
+%doc doc/{CHANGELOG,HISTORY,LIESMICH,NEWS,README,TUTORIAL*} README.install.urpmi
 %attr(-,vdr,vdr) %dir %{_localstatedir}/xxv
 %attr(-,vdr,vdr) %dir %{_logdir}/xxv
 %attr(0640,vdr,vdr) %config(noreplace) %{_localstatedir}/xxv/xxvd.cfg
@@ -182,5 +187,4 @@ rm -rf %{buildroot}
 %{_initrddir}/xxv
 %{_bindir}/xxvd
 %{_datadir}/%{name}
-
-
+%{_mandir}/man1/xxvd.1*

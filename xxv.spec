@@ -81,8 +81,8 @@ perl -pi -e 's,"\$RealBin/../lib","%{_datadir}/%{name}",' bin/xxvd
 perl -pi -e 's,"/var/log/xxvd.log","%{_logdir}/%{name}/xxvd.log",' bin/xxvd
 perl -pi -e 's,"\$RealBin/../locale","%{_datadir}/locale",' bin/xxvd
 perl -pi -e 's,"\$RealBin/../lib/XXV,"%{_datadir}/%{name}/XXV,' bin/xxvd
-perl -pi -e 's,"\$RealBin/../etc/xxvd.cfg","%{_localstatedir}/%{name}/xxvd.cfg",' bin/xxvd
-perl -pi -e 's,"\$RealBin/../doc","%{_localstatedir}/%{name}/doc",' bin/xxvd
+perl -pi -e 's,"\$RealBin/../etc/xxvd.cfg","%{_localstatedir}/lib/%{name}/xxvd.cfg",' bin/xxvd
+perl -pi -e 's,"\$RealBin/../doc","%{_localstatedir}/lib/%{name}/doc",' bin/xxvd
 sed -i '/HTMLDIR/s,"\$RealBin/../","%{_datadir}/%{name}/skins",' bin/xxvd
 perl -pi -e 's,"\$RealBin/../share/,"%{_datadir}/%{name}/,' bin/xxvd
 perl -pi -e 's,"\$RealBin/../contrib","%{_datadir}/%{name}/contrib",' bin/xxvd
@@ -90,7 +90,7 @@ perl -pi -e 's,"\$RealBin/../contrib","%{_datadir}/%{name}/contrib",' bin/xxvd
 cat > README.install.urpmi <<EOF
 You must create the database "xxv" on your mysql server, create a
 mysql user for xxv and enter the correct USR and PWD in the
-[General] section of %{_localstatedir}/%{name}/xxvd.cfg.
+[General] section of %{_localstatedir}/lib/%{name}/xxvd.cfg.
 
 You can create the database with default password with the following
 command:
@@ -119,9 +119,9 @@ install -d -m755 %{buildroot}%{_bindir}
 install -m755 bin/xxvd %{buildroot}%{_bindir}
 
 install -d -m755 %{buildroot}%{_sysconfdir}
-install -d -m755 %{buildroot}%{_localstatedir}/%{name}
-install -m644 etc/xxvd.cfg.example %{buildroot}%{_localstatedir}/%{name}/xxvd.cfg
-ln -s %{_localstatedir}/%{name} %{buildroot}%{_sysconfdir}/%{name}
+install -d -m755 %{buildroot}%{_localstatedir}/lib/%{name}
+install -m644 etc/xxvd.cfg.example %{buildroot}%{_localstatedir}/lib/%{name}/xxvd.cfg
+ln -s %{_localstatedir}/lib/%{name} %{buildroot}%{_sysconfdir}/%{name}
 
 install -d -m755 %{buildroot}%{_var}/cache/%{name}
 
@@ -129,8 +129,8 @@ install -d -m755 %{buildroot}%{_datadir}/%{name}/contrib
 install -m644 contrib/*.sql %{buildroot}%{_datadir}/%{name}/contrib
 install -m755 contrib/update-xxv %{buildroot}%{_datadir}/%{name}/contrib
 
-install -d -m755 %{buildroot}%{_localstatedir}/%{name}/doc
-install -m644 doc/* %{buildroot}%{_localstatedir}/%{name}/doc
+install -d -m755 %{buildroot}%{_localstatedir}/lib/%{name}/doc
+install -m644 doc/* %{buildroot}%{_localstatedir}/lib/%{name}/doc
 
 install -d -m755 %{buildroot}%{_sysconfdir}/logrotate.d
 install -m644 %SOURCE4 %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
@@ -175,14 +175,14 @@ rm -rf %{buildroot}
 %files -f xxv.lang
 %defattr(-,root,root)
 %doc doc/{CHANGELOG,HISTORY,LIESMICH,NEWS,README,TUTORIAL*} README.install.urpmi
-%attr(-,vdr,vdr) %dir %{_localstatedir}/xxv
+%attr(-,vdr,vdr) %dir %{_localstatedir}/lib/xxv
 %attr(-,vdr,vdr) %dir %{_logdir}/xxv
-%attr(0640,vdr,vdr) %config(noreplace) %{_localstatedir}/xxv/xxvd.cfg
+%attr(0640,vdr,vdr) %config(noreplace) %{_localstatedir}/lib/xxv/xxvd.cfg
 %attr(-,vdr,vdr) %{_var}/cache/%{name}
 %config(noreplace) %{_sysconfdir}/sysconfig/xxv
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
-%attr(-,vdr,vdr) %dir %{_localstatedir}/xxv/doc
-%attr(-,vdr,vdr) %{_localstatedir}/xxv/doc/*
+%attr(-,vdr,vdr) %dir %{_localstatedir}/lib/xxv/doc
+%attr(-,vdr,vdr) %{_localstatedir}/lib/xxv/doc/*
 %{_sysconfdir}/xxv
 %{_initrddir}/xxv
 %{_bindir}/xxvd

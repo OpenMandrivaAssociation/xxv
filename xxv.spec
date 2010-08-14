@@ -1,6 +1,6 @@
 
 %define name	xxv
-%define version	1.4
+%define version	1.6
 %define rel	1
 
 Summary:	Xtreme eXtension for VDR
@@ -29,6 +29,8 @@ Requires:	vdr2jpeg
 Requires:	fonts-ttf-bitstream-vera
 # most 'use' statements are 'eval'ed, so we have to add requires manually;
 # external versions of bundled libraries
+Requires:	perl(Locale::Maketext::Extract)
+Requires:	perl(Locale::Maketext::Lexicon)
 Requires:	perl(Mail::SendEasy)
 Requires:	perl(Module::Reload)
 Requires:	perl(MP3::Icecast)
@@ -48,6 +50,7 @@ Requires:	perl(Digest::MD5)
 Requires:	perl(Digest::HMAC_MD5)
 Requires:	perl(Encode)
 Requires:	perl(Event)
+Requires:	perl(Font::TTF::Font)
 Requires:	perl(GD)
 Requires:	perl(Getopt::Long)
 Requires:	perl(HTML::TextToHTML)
@@ -75,9 +78,9 @@ Requires:	perl(URI::Escape)
 Requires:	perl(XML::RSS)
 Requires:	perl(XML::Simple)
 
-%define _provides_exceptions perl(HTML::TextToHTML)\\|perl(SOAPService)\\|perl(SOAP::Transport::HTTP::Event)\\|perl(Tools)\\|perl(Data::COW\\|perl(MediaLibParser
-%define _requires_exceptions perl(HTML::TextToHTML)\\|perl(SOAPService)\\|perl(SOAP::Transport::HTTP::Event)\\|perl(Tools)\
-\|perl(Data::COW\\|perl(MediaLibParser
+%define priv_exceptions perl(SOAP::Transport::HTTP::Event)\\|perl(Tools)\\|perl(Data::COW\\|perl(MediaLibParser
+%define _provides_exceptions %priv_exceptions
+%define _requires_exceptions %priv_exceptions
 
 %description
 XXV means "Xtreme eXtension for VDR" and is a central service is for
@@ -186,7 +189,22 @@ install -d -m755 %{buildroot}%{_datadir}/%{name}/skins
 cp -a wml html %{buildroot}%{_datadir}/%{name}/skins
 ln -s html %{buildroot}%{_datadir}/%{name}/skins/default
 
+cp -a lib/* share/* %{buildroot}%{_datadir}/%{name}
 cp -a lib/Tools.pm lib/XXV lib/Data lib/SOAP lib/MediaLibParser* share/* %{buildroot}%{_datadir}/%{name}
+
+# remove bundled stuff we have a system version for
+rm -r %{buildroot}%{_datadir}/%{name}/Locale/Maketext/Extract*
+rm -r %{buildroot}%{_datadir}/%{name}/Locale/Maketext/Lexicon*
+rm -r %{buildroot}%{_datadir}/%{name}/Mail/SendEasy*
+rm -r %{buildroot}%{_datadir}/%{name}/Module/Reload*
+rm -r %{buildroot}%{_datadir}/%{name}/MP3/Icecast*
+rm -r %{buildroot}%{_datadir}/%{name}/Net/IP/Match/Regexp*
+rm -r %{buildroot}%{_datadir}/%{name}/Term/ReadLine/{Perl*,readline*}
+rm -r %{buildroot}%{_datadir}/%{name}/Text/ASCIITable*
+rm -r %{buildroot}%{_datadir}/%{name}/fonts/ttf-bitstream-vera
+
+# remove bundle
+rm -r %{buildroot}%{_datadir}/%{name}/Bundle
 
 for f in locale/*/; do
 	install -d -m755 \
@@ -236,5 +254,18 @@ rm -rf %{buildroot}
 %{_bindir}/at-vdradmin2xxv.pl
 %{_bindir}/chronicle-remove-duplicate.pl
 %{_bindir}/update-xxv
-%{_datadir}/%{name}
+%dir %{_datadir}/%{name}
+%dir %{_datadir}/%{name}/Data
+%{_datadir}/%{name}/Data/COW.pm
+%{_datadir}/%{name}/MediaLibParser*
+%dir %{_datadir}/%{name}/SOAP
+%dir %{_datadir}/%{name}/SOAP/Transport
+%dir %{_datadir}/%{name}/SOAP/Transport/HTTP
+%{_datadir}/%{name}/SOAP/Transport/HTTP/Event.pm
+%{_datadir}/%{name}/Tools.pm
+%{_datadir}/%{name}/XXV
+%{_datadir}/%{name}/contrib
+%{_datadir}/%{name}/news
+%{_datadir}/%{name}/skins
+%{_datadir}/%{name}/xmltv
 %{_mandir}/man1/xxvd.1*

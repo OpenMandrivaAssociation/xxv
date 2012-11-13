@@ -1,0 +1,17 @@
+Index: xxv-1.2/bin/xxvd
+===================================================================
+--- xxv-1.2/bin/xxvd
++++ xxv-1.2/bin/xxvd	2008-02-29 21:56:52.000000000 +0200
+@@ -191,8 +191,10 @@
+ # Check PID ..
+ if(! $killer and -e $PATHS->{PIDFILE}) {
+     my $oldpid = load_file($PATHS->{PIDFILE});
+-    printf "Sorry, but xxvd is running with PID %s !\nIf'nt a process running remove '%s' !\n", $oldpid, $PATHS->{PIDFILE} ;
+-    exit(1);
++    if ($oldpid) {
++        printf "Sorry, but xxvd is running with PID %s !\nIf'nt a process running remove '%s' !\n", $oldpid, $PATHS->{PIDFILE} ;
++        exit(1);
++    }
+ } elsif($killer and ! -e $PATHS->{PIDFILE}) {
+     printf "PID File %s does not exist!\n", $PATHS->{PIDFILE};
+     exit(1);

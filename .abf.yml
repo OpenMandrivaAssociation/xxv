@@ -1,0 +1,5 @@
+sources:
+  "xxv-1.6.tgz:"	64aff646e05c5abded0d7f0d1a07326cac887e40
+  "xxv.init:"	ba414639e6e0648fa6eaa212df44b046300311b2
+  "xxv.logrotate:"	66cbee6be3fa06ae2c4faf88c59f76968336e5e8
+  "xxv.sysconfig:"	b43f5d534737e0a2f85e61d13a50bbd89e34425e

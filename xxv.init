@@ -1,0 +1,78 @@
+#!/bin/sh
+#
+# chkconfig: 345 95 5
+# description: Xtreme eXtension for VDR
+
+### BEGIN INIT INFO
+# Provides: xxv
+# Should-Start: vdr
+# Required-Start: $network
+# Should-Stop: vdr
+# Default-Start: 3 4 5
+# Short-Description: Xtreme eXtension for VDR
+# Description: Web and telnet interface for Video Disc Recorder
+### END INIT INFO
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+DAEMONNAME=xxv
+
+# Get config.
+VDR_USER=vdr
+VERBOSE=3
+[ -f /etc/sysconfig/vdr ] && . /etc/sysconfig/vdr
+[ -f /etc/sysconfig/xxv ] && . /etc/sysconfig/xxv
+
+
+OPTIONS="--configfile /etc/xxv/xxvd.cfg \
+	 --logfile /var/log/xxv/xxvd.log \
+	 --pidfile /var/run/xxvd.pid \
+	 --docudir /var/lib/xxv/doc/ \
+	 --poddir /var/lib/xxv/doc/ \
+	 --htmldir /usr/share/xxv/skins/ \
+	 --contrib /usr/share/xxv/contrib/ \
+	 --newsmods /usr/share/xxv/XXV/OUTPUT/NEWS \
+	 --newstmpl /usr/share/xxv/news \
+	 --verbose $VERBOSE"
+
+LOCKFILE=/var/lock/subsys/$DAEMONNAME
+
+case "$1" in
+  start)
+  	gprintf "Starting %s: " "xxvd"
+	touch /var/run/xxvd.pid
+  	chown -R $VDR_USER /var/lib/xxv /var/log/xxv /var/cache/xxv /var/run/xxvd.pid
+  	if ! status xxvd >/dev/null; then
+  		daemon --user $VDR_USER xxvd $OPTIONS
+  		RETVAL=$?
+  	else
+  		RETVAL=0
+  		echo_success
+  	fi
+  	echo
+  	touch $LOCKFILE
+  	;;
+  stop)
+  	gprintf "Shutting down %s: " "xxvd"
+  	xxvd --kill $OPTIONS &>/dev/null
+  	killproc xxvd
+  	RETVAL=$?
+  	echo
+  	rm -f $LOCKFILE
+  	;;
+  status)
+  	status xxvd
+  	RETVAL=$?
+  	;;
+  reload|restart)
+  	$0 stop
+  	$0 start
+  	RETVAL=$?
+  	;;
+  *)
+  	gprintf "Usage: %s\n" "$0 {start|stop|restart|reload|status}"
+  	exit 1
+esac
+
+exit $RETVAL

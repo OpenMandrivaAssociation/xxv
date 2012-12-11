@@ -1,0 +1,5 @@
+/var/log/xxv/xxvd.log /var/log/xxv/xxvd_mplayer.log {
+    notifempty
+    missingok
+    copytruncate
+}

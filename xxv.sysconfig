@@ -1,0 +1,12 @@
+
+# XXV configuration
+
+# The user xxvd runs as.
+# If VDR is installed in the same host, the value in
+# /etc/sysconfig/vdr is used.
+# default: vdr
+# VDR_USER="vdr"
+
+# Verbose level.
+# default: 3
+# VERBOSE=3

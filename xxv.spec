@@ -1,7 +1,7 @@
 
 %define name	xxv
 %define version	1.6
-%define rel	1
+%define rel	2
 
 Summary:	Xtreme eXtension for VDR
 Name:		%name
@@ -25,7 +25,7 @@ Requires(post):	rpm-helper
 Requires(preun): rpm-helper
 Requires:	vdr-common
 Suggests:	mysql
-Requires:	vdr2jpeg
+#Requires:	vdr2jpeg
 Requires:	fonts-ttf-bitstream-vera
 # most 'use' statements are 'eval'ed, so we have to add requires manually;
 # external versions of bundled libraries

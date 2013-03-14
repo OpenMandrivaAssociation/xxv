@@ -1,12 +1,7 @@
-
-%define name	xxv
-%define version	1.6
-%define rel	2
-
 Summary:	Xtreme eXtension for VDR
-Name:		%name
-Version:	%version
-Release:	%mkrel %rel
+Name:		xxv
+Version:	1.6
+Release:	3
 Group:		Video
 License:	LGPL
 URL:		http://xpix.dieserver.de/
@@ -78,9 +73,8 @@ Requires:	perl(URI::Escape)
 Requires:	perl(XML::RSS)
 Requires:	perl(XML::Simple)
 
-%define priv_exceptions perl(SOAP::Transport::HTTP::Event)\\|perl(Tools)\\|perl(Data::COW\\|perl(MediaLibParser
-%define _provides_exceptions %priv_exceptions
-%define _requires_exceptions %priv_exceptions
+%define __noautoreq 'perl\\(Tools\\)|perl\\(SOAP::Transport::HTTP::Event\\)|perl\\(Data::COW.*|perl\\(MediaLibParser.*'
+%define __noautoprov 'perl\\(Tools\\)|perl\\(SOAP::Transport::HTTP::Event\\)|perl\\(Data::COW.*|perl\\(MediaLibParser.*'
 
 %description
 XXV means "Xtreme eXtension for VDR" and is a central service is for

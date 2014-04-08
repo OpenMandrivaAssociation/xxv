@@ -1,7 +1,7 @@
 Summary:	Xtreme eXtension for VDR
 Name:		xxv
-Version:	1.6
-Release:	3
+Version:	1.6.1
+Release:	1
 Group:		Video
 License:	LGPL
 URL:		http://xpix.dieserver.de/
@@ -12,7 +12,6 @@ Source4:	xxv.logrotate
 # (Anssi 02/2008) In initscript we precreate empty pidfile so that vdr user
 # has the rights to write there:
 Patch0:		xxv-1.2-ignore-empty-pidfile.patch
-BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildArch:	noarch
 # for macros:
 BuildRequires:	vdr-devel
@@ -73,7 +72,7 @@ Requires:	perl(URI::Escape)
 Requires:	perl(XML::RSS)
 Requires:	perl(XML::Simple)
 
-%define __noautoreq 'perl\\(Tools\\)|perl\\(SOAP::Transport::HTTP::Event\\)|perl\\(Data::COW.*|perl\\(MediaLibParser.*'
+%define __noautoreq 'perl\\(Tools\\)|perl\\(SOAP::Transport::HTTP::Event\\)|perl\\(Data::COW.*|perl\\(MediaLibParser.*|perl\\(XXV.*'
 %define __noautoprov 'perl\\(Tools\\)|perl\\(SOAP::Transport::HTTP::Event\\)|perl\\(Data::COW.*|perl\\(MediaLibParser.*'
 
 %description
@@ -155,8 +154,6 @@ See "update-xxv -h" for the proper parameters that may be needed.
 EOF
 
 %install
-rm -rf %{buildroot}
-
 install -d -m755 %{buildroot}%{_bindir}
 install -m755 bin/xxvd %{buildroot}%{_bindir}
 
@@ -222,9 +219,6 @@ install -m644 doc/*.1  %{buildroot}%{_mandir}/man1
 
 %find_lang xxv
 
-%clean
-rm -rf %{buildroot}
-
 %post
 %_post_service %name
 
@@ -232,7 +226,6 @@ rm -rf %{buildroot}
 %_preun_service %name
 
 %files -f xxv.lang
-%defattr(-,root,root)
 %doc doc/{CHANGELOG,README} README.install.urpmi README.*.upgrade.urpmi
 %attr(-,vdr,vdr) %dir %{_localstatedir}/lib/xxv
 %attr(-,vdr,vdr) %dir %{_logdir}/xxv
@@ -263,59 +256,3 @@ rm -rf %{buildroot}
 %{_datadir}/%{name}/skins
 %{_datadir}/%{name}/xmltv
 %{_mandir}/man1/xxvd.1*
-
-
-%changelog
-* Sun Aug 15 2010 Anssi Hannula <anssi@mandriva.org> 1.6-1mdv2011.0
-+ Revision: 569839
-- new version
-- change .spec file to make it harder to forget various changes when
-  updating
-
-* Tue Jul 14 2009 Anssi Hannula <anssi@mandriva.org> 1.4-1mdv2010.0
-+ Revision: 395999
-- new version 1.4
-- fix some instances of init script being referred to as xxvd, not xxv
-- change requires on mysql to suggests
-- update dependencies
-- use system vera fonts
-- provide update-xxv and other contrib scripts in /usr/bin
-- add README.1.4.upgrade.urpmi about running update-xxv
-
-* Mon Jun 02 2008 Pixel <pixel@mandriva.com> 1.2-1mdv2009.0
-+ Revision: 214231
-- adapt to %%_localstatedir now being /var instead of /var/lib (#22312)
-
-* Fri Feb 29 2008 Anssi Hannula <anssi@mandriva.org> 1.2-1mdv2008.1
-+ Revision: 176914
-- new version
-- precreate pidfile to allow vdr user to write to it (P0)
-
-  + Olivier Blin <oblin@mandriva.com>
-    - restore BuildRoot
-
-  + Thierry Vignaud <tv@mandriva.org>
-    - kill re-definition of %%buildroot on Pixel's request
-
-* Fri Jun 01 2007 Anssi Hannula <anssi@mandriva.org> 0.90-2mdv2008.0
-+ Revision: 33697
-- fix invalid paths in config (BuildReq)
-
-
-* Thu Mar 01 2007 Anssi Hannula <anssi@mandriva.org> 0.90-1mdv2007.0
-+ Revision: 130778
-- 0.90
-- fix requires
-- fix initscript
-- Import xxv
-
-* Sun Jul 09 2006 Anssi Hannula <anssi@mandriva.org> 0.80-1mdv2007.0
-- 0.80
-
-* Tue Jun 20 2006 Anssi Hannula <anssi@mandriva.org> 0.72-2mdv2007.0
-- use _ prefix for system path macros
-- protect xxvd.cfg, it contains credentials in cleartext
-
-* Sat Jun 03 2006 Anssi Hannula <anssi@mandriva.org> 0.72-1mdv2007.0
-- initial Mandriva release
-

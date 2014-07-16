@@ -1,12 +1,12 @@
 Summary:	Xtreme eXtension for VDR
 Name:		xxv
 Version:	1.6.1
-Release:	1
+Release:	4
 Group:		Video
 License:	LGPL
 URL:		http://xpix.dieserver.de/
 Source:		http://xpix.dieserver.de/downloads/xxv/%name-%version.tgz
-Source2:	xxv.init
+Source2:	xxv.service
 Source3:	xxv.sysconfig
 Source4:	xxv.logrotate
 # (Anssi 02/2008) In initscript we precreate empty pidfile so that vdr user
@@ -101,7 +101,7 @@ perl -pi -e 's,file=/video/channels.conf,file=%{_vdr_cfgdir}/channels.conf,' etc
 #perl -pi -e 's,epgfile=/video/epg.data,epgfile=%{_vdr_videodir}/epg.data,' etc/xxvd.cfg.example
 perl -pi -e 's,epgimages=/var/cache/xxv/epgimages,epgimages=%{_vdr_videodir}/epgimages,' etc/xxvd.cfg.example
 perl -pi -e 's,Language=de_DE,Language=en_US,' etc/xxvd.cfg.example
-perl -pi -e 's,initscript=/etc/init.d/xxvd,initscript=%{_initrddir}/xxv,' etc/xxvd.cfg.example
+#perl -pi -e 's,initscript=/etc/init.d/xxvd,initscript=%{_unitdir}/xxv,' etc/xxvd.cfg.example
 perl -pi -e 's,commandfile=/video/reccmds.conf,file=%{_vdr_cfgdir}/reccmds.conf,' etc/xxvd.cfg.example
 perl -pi -e 's,videodir=/video,videodir=%{_vdr_videodir},' etc/xxvd.cfg.example
 perl -pi -e 's,commands=/video/commands.conf,commands=%{_vdr_cfgdir}/commands.conf,' etc/xxvd.cfg.example
@@ -207,10 +207,10 @@ done
 install -d -m755 %{buildroot}%{_logdir}/%{name}
 
 install -d -m755 %{buildroot}%{_sysconfdir}/sysconfig
-install -m644 %SOURCE3 %{buildroot}%{_sysconfdir}/sysconfig/xxv
+install -m644 %{SOURCE3} %{buildroot}%{_sysconfdir}/sysconfig/xxv
 
-install -d -m755 %{buildroot}%{_initrddir}
-install -m755 %SOURCE2 %{buildroot}%{_initrddir}/xxv
+install -d -m755 %{buildroot}%{_unitdir}
+install -m755 %{SOURCE2} %{buildroot}%{_unitdir}/xxv.service
 
 install -d -m755 %{buildroot}%{_logdir}/xxv
 
@@ -236,7 +236,7 @@ install -m644 doc/*.1  %{buildroot}%{_mandir}/man1
 %attr(-,vdr,vdr) %dir %{_localstatedir}/lib/xxv/doc
 %attr(-,vdr,vdr) %{_localstatedir}/lib/xxv/doc/*
 %{_sysconfdir}/xxv
-%{_initrddir}/xxv
+%{_unitdir}/xxv*
 %{_bindir}/xxvd
 %{_bindir}/at-vdradmin2xxv.pl
 %{_bindir}/chronicle-remove-duplicate.pl

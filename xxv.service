@@ -1,0 +1,17 @@
+[Unit]
+Description=Xtreme eXtension for VDR
+Requires=rpcbind.service
+After=syslog.target network.target rpcbind.service 
+
+[Service]
+Type=forking
+RemainAfterExit=yes
+EnvironmentFile=/etc/sysconfig/network
+EnvironmentFile=/etc/sysconfig/xxv
+EnvironmentFile=/etc/sysconfig/vdr
+#PIDFile=/var/run/xxvd.pid
+ExecStart=/usr/bin/xxvd
+
+
+[Install]
+WantedBy=multi-user.target

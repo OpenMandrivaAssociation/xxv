@@ -1,7 +1,7 @@
 Summary:	Xtreme eXtension for VDR
 Name:		xxv
 Version:	1.6.1
-Release:	4
+Release:	6
 Group:		Video
 License:	LGPL
 URL:		http://xpix.dieserver.de/
@@ -220,10 +220,13 @@ install -m644 doc/*.1  %{buildroot}%{_mandir}/man1
 %find_lang xxv
 
 %post
-%_post_service %name
+%systemd_post %{name}.service
 
 %preun
-%_preun_service %name
+%systemd_preun %{name}.service
+
+%postun
+%systemd_postun_with_restart %{name}.service
 
 %files -f xxv.lang
 %doc doc/{CHANGELOG,README} README.install.urpmi README.*.upgrade.urpmi

@@ -1,7 +1,7 @@
 Summary:	Xtreme eXtension for VDR
 Name:		xxv
 Version:	1.6.1
-Release:	6
+Release:	7
 Group:		Video
 License:	LGPL
 URL:		http://xpix.dieserver.de/

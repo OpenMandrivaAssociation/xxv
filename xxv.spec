@@ -4,7 +4,7 @@ Version:	1.6.1
 Release:	8
 Group:		Video
 License:	LGPL
-URL:		http://xpix.dieserver.de/
+URL:		https://xpix.dieserver.de/
 Source:		http://xpix.dieserver.de/downloads/xxv/%name-%version.tgz
 Source2:	xxv.service
 Source3:	xxv.sysconfig
